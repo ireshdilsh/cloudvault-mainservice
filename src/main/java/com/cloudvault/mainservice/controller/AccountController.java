@@ -16,11 +16,7 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @Operation(
-            summary = "Soft delete current account",
-            description = "Marks the authenticated user's account as DELETED and sets deletedAt without removing the row.",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
+    @Operation(summary = "Soft delete current account", description = "Marks the authenticated user's account as DELETED and sets deletedAt without removing the row.", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping
     public ResponseEntity<Void> deleteAccount() {
         accountService.softDeleteCurrentAccount();

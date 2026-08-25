@@ -1,3 +1,5 @@
 package com.cloudvault.mainservice.entity;
 
-public enum Visibility { PRIVATE, SHARED }
+public enum Visibility {
+    PRIVATE, SHARED
+}
