@@ -24,15 +24,6 @@ public class UserAccount {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(nullable = false, length = 100)
-    private String name;
-
-    @Column(nullable = false, unique = true, length = 100)
-    private String username;
-
-    @Column(name = "avatar_url", length = 512)
-    private String avatarUrl;
-
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 

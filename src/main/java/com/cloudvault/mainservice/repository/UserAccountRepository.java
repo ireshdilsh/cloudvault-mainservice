@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
     Optional<UserAccount> findByIdAndStatusNot(Long id, UserStatus status);
 
-    Optional<UserAccount> findByUsernameIgnoreCase(String username);
+    // Optional<UserAccount> findByUsernameIgnoreCase(String username);
 }

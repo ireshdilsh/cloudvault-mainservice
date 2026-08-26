@@ -7,7 +7,7 @@ spring:
       max-request-size: ${MAX_REQUEST_SIZE:50MB}
     
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/cloudvault}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/cloudvaults}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:1234}
     driver-class-name: org.postgresql.Driver
@@ -21,11 +21,13 @@ spring:
         format_sql: true
 
 server:
+  port: ${SERVER_PORT:8082}
   servlet:
     context-path: /api
   max-http-request-header-size: 16KB
 
 app:
+  internal-service-key: ${INTERNAL_SERVICE_KEY:cloudvault-internal-development-key}
   frontend:
     url: ${APP_FRONTEND_URL:http://localhost:3000}
   storage:
@@ -43,3 +45,8 @@ springdoc:
 jwt:
   secret: ${JWT_SECRET:change-this-development-secret-key-at-least-32-bytes}
   expiration: ${JWT_EXPIRATION:86400000}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka/}

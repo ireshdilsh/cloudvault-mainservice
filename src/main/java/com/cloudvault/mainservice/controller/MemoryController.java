@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,6 +99,46 @@ public class MemoryController {
         if (m.getCoverPhotoId() == null)
             m.setCoverPhotoId(p.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("data", photoView(p)));
+    }
+
+    @GetMapping("/{memoryId}/photos/{photoId}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<Resource> getPhoto(
+            @PathVariable UUID memoryId,
+            @PathVariable UUID photoId
+    ) {
+
+        // Check ownership
+        owned(memoryId);
+
+        MemoryPhoto photo = photos
+                .findByIdAndMemoryId(photoId, memoryId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Photo not found")
+                );
+
+        // Load actual image from local storage
+        Resource resource =
+                storage.load(photo.getStorageKey());
+
+        MediaType mediaType;
+
+        try {
+            mediaType = MediaType.parseMediaType(
+                    photo.getContentType()
+            );
+        } catch (Exception e) {
+            mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        }
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .contentLength(photo.getSize())
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline"
+                )
+                .body(resource);
     }
 
     @DeleteMapping("/{memoryId}/photos/{photoId}")

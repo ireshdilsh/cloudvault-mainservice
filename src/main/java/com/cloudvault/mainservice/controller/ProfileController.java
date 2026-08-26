@@ -25,19 +25,17 @@ public class ProfileController {
     public Map<String, Object> profile() {
         UserAccount u = user();
         return Map.of("data",
-                Map.of("id", u.getId(), "name", u.getName(), "email", u.getEmail(), "username", u.getUsername(),
-                        "memoryCount", memories.countByUserIdAndDeletedAtIsNull(u.getId()), "placeCount",
-                        places.countByUserId(u.getId()), "createdAt", u.getCreatedAt()));
+                Map.of());
     }
 
     @PutMapping
     @Transactional
     public Map<String, Object> update(@Valid @RequestBody ProfileRequest r) {
         UserAccount u = user();
-        if (!u.getUsername().equalsIgnoreCase(r.username()) && users.findByUsernameIgnoreCase(r.username()).isPresent())
-            throw new DuplicateResourceException("Username is already in use");
-        u.setName(r.name().trim());
-        u.setUsername(r.username().trim());
+        // if (users.findByUsernameIgnoreCase(r.username()).isPresent())
+        //     throw new DuplicateResourceException("Username is already in use");
+        // u.setName(r.name().trim());
+        // u.setUsername(r.username().trim());
         return profile();
     }
 

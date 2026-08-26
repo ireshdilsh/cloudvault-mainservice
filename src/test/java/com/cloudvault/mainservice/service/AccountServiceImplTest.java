@@ -4,6 +4,7 @@ import com.cloudvault.mainservice.entity.UserAccount;
 import com.cloudvault.mainservice.entity.UserStatus;
 import com.cloudvault.mainservice.exception.ResourceNotFoundException;
 import com.cloudvault.mainservice.repository.UserAccountRepository;
+import com.cloudvault.mainservice.repository.MemoryRepository;
 import com.cloudvault.mainservice.security.CurrentUserService;
 import com.cloudvault.mainservice.service.impl.AccountServiceImpl;
 import java.util.Optional;
@@ -27,6 +28,9 @@ class AccountServiceImplTest {
     @Mock
     private CurrentUserService currentUserService;
 
+    @Mock
+    private MemoryRepository memoryRepository;
+
     @InjectMocks
     private AccountServiceImpl accountService;
 
@@ -46,6 +50,7 @@ class AccountServiceImplTest {
         assertThat(user.isActive()).isFalse();
         assertThat(user.getDeletedAt()).isNotNull();
         verify(userAccountRepository).findByIdAndStatusNot(1L, UserStatus.DELETED);
+        verify(memoryRepository).softDeleteAllByUserId(1L);
     }
 
     @Test
